@@ -1,0 +1,20 @@
+name: Semgrep SAST
+
+on:
+  push:
+    branches: [ "master", "main" ]
+
+jobs:
+  semgrep-scan:
+    name: Semgrep Analysis
+    runs-on: ubuntu-latest
+
+    if: (github.actor != 'dependabot[bot]')
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Semgrep SAST
+        run: |
+          docker run --rm -v "${{ github.workspace }}:/src" returntocorp/semgrep semgrep scan --config auto
